@@ -1,0 +1,75 @@
+.App {}
+
+.showBurger {
+  transition: 0.6s ease-in-out;
+  animation: translate 0.6s ease-in-out;
+}
+
+@keyframes translate {
+  from {
+    transform: translateX(-150px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.headerBgDark {
+  background-color: rgb(0 0 0 / 0.7);
+}
+
+.inputSearchMessage {
+  transition: width 0.7s ease-in-out;
+}
+
+/* Контакт лист  */
+
+
+.contactList {
+  border-right: 1px solid blue;
+  overflow: auto;
+  max-height: 100vh;
+}
+
+.contactList::-webkit-scrollbar {
+  width: 4px;
+  cursor: default;
+}
+
+.contactList::-webkit-scrollbar-thumb {
+  background-color: #3b8ddf;
+  border-radius: 10px;
+}
+
+.contactList::-webkit-scrollbar-thumb:hover {
+  background-color: #0e2235;
+}
+
+.messegeList {
+  overflow: scroll;
+  /* scroll-behavior: unset; */
+  max-height: 100vh;
+  cursor: pointer;
+}
+
+.messegeList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.messegeList::-webkit-scrollbar-thumb {
+  background-color: #3b8ddf;
+  border-radius: 10px;
+}
+
+.messegeList::-webkit-scrollbar-thumb:hover {
+  background-color: #0e2235;
+}
+
+.searchMessegeNone .divSeach {
+  display: none
+}
+
+.searchMessege {
+  transition: width 0.7s ease-in-out;
+}
