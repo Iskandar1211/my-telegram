@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 
 export const Registration = ({ setRegistrad }) => {
 
@@ -15,7 +15,7 @@ export const Registration = ({ setRegistrad }) => {
         img: "",
         messege: ""
     })
-    console.log(user);
+
     const onUserInput = (key) => (e) => {
         setUser(
             { ...user, id: crypto.randomUUID(), [key]: e.target.value }
@@ -74,6 +74,7 @@ export const Registration = ({ setRegistrad }) => {
 
             <div className='flex gap-3 justify-end w-[70%]'>
                 <button className={registrationStyle} onClick={() => { onRegister(); setRegistrad(true) }}>{registredText}</button>
+                <button className='bg-slate-500 px-6 py-2 hover:bg-slate-600 rounded text-white' onClick={() => setRegistrad(true)}>Login</button>
             </div>
         </div>
     )

@@ -29,103 +29,19 @@ export const TelegramContext = ({ children }) => {
         setShoose(true)
     }
 
-    const contactsForSearch = [
-        {
-            id: 11,
-            firstName: 'Алишер',
-            lastName: 'Нарзуллоев',
-            countMessage: 2,
-            status: true,
-            img: '/contacts/AlisherNarzulloev.jpg',
-            messege: "Hello Leanne how.."
-        },
-        {
-            id: 12,
-            firstName: 'Антон ',
-            lastName: 'Безухов',
-            countMessage: 5,
-            status: false,
-            img: '/contacts/AntonBezukhov.jpg',
-            messege: "how do you do"
-        },
-        {
-            id: 13,
-            firstName: 'Бахтовар ',
-            lastName: 'Мамуров',
-            countMessage: 6,
-            status: true,
-            img: '/contacts/BahtovarMamurov.jpg',
-            messege: "Чихели сози"
-        },
-        {
-            id: 14,
-            firstName: 'Диловар',
-            lastName: 'Саидов',
-            countMessage: 8,
-            status: false,
-            img: '/contacts/DilovarSaidov.jpg',
-            messege: "Как успехи"
-        },
-        {
-            id: 15,
-            firstName: 'Фаха',
-            lastName: 'Исоев',
-            countMessage: 1,
-            status: true,
-            img: '/contacts/fahaIsoev.jpg',
-            messege: "Что нового ?..."
-        },
-        {
-            id: 16,
-            firstName: 'Хасан',
-            lastName: 'Солиев',
-            countMessage: 15,
-            status: false,
-            img: '/contacts/HasanSoliev.jpg',
-            messege: "Чем занят"
-        },
-        {
-            id: 17,
-            firstName: 'Муниса',
-            lastName: '',
-            countMessage: 22,
-            status: true,
-            img: '/contacts/Munisa.jpg',
-            messege: "Как погода сегодня"
-        },
-        {
-            id: 18,
-            firstName: 'Нигора',
-            lastName: '',
-            countMessage: 4,
-            status: false,
-            img: '/contacts/Nigora.jpg',
-            messege: "Справился с домашкой?"
-        },
-        {
-            id: 19,
-            firstName: 'Озодамо',
-            lastName: 'Фаромуз',
-            countMessage: 7,
-            status: false,
-            img: '/contacts/Ozadamo.jpg',
-            messege: "Какие планы на сегодня"
-        },
-        {
-            id: 20,
-            firstName: 'Шахрон',
-            lastName: 'Комилов',
-            countMessage: 6,
-            status: true,
-            img: '/contacts/ShakhronKomilov.jpg',
-            messege: "JS или TS ?"
-        }
-    ];
+    const [contactsForSearch, setContactsForSearch] = useState([]);
+    useEffect(() => {
+        fetch('http://localhost:3001/contacts')
+            .then(response => response.json())
+            .then(contacts => setContactsForSearch(contacts))
+    }, [])
     const concatContacts = [...contacts, ...contactsForSearch];
 
     const [filterContacts, setFilterContacts] = useState([]);
+
     useEffect(() => {
-        fetch('http://127.0.0.1:3001/users').then(response => response.json())
+        fetch('http://127.0.0.1:3001/users')
+            .then(response => response.json())
             .then(contacts => setFilterContacts(contacts))
     }, []);
 
@@ -147,11 +63,6 @@ export const TelegramContext = ({ children }) => {
     // MessegeBox
 
     const [messages, setMessages] = useState([]);
-    useEffect(() => {
-        fetch('http://127.0.0.1:3001/messeges')
-            .then(response => response.json())
-            .then(messages => setMessages(messages))
-    }, []);
 
     const [getContacts, setGetContacts] = useState([]);
 
@@ -165,14 +76,10 @@ export const TelegramContext = ({ children }) => {
         && contact.id !== choosenContact.id
     );
 
-    const [filteredMessages, setFilteredMessages] = useState(messages);
-
     useEffect(() => {
         if (!choosenContact) return;
-        fetch(`http://127.0.0.1:3001/message-user/${findContactForFilterMessages.id}/${choosenContact.id}`)
-        .then(response => response.json())
-        .then(messages => setFilteredMessages(messages))
-    }, [choosenContact, messages])
+        getMessages()
+    }, [choosenContact])
 
 
     const [showSearchMesseges, setShowSeachMessages] = useState(false);
@@ -198,7 +105,7 @@ export const TelegramContext = ({ children }) => {
                 method: 'DELETE',
             });
             if (response.ok) {
-                setMessages(filteredMessages.filter(message => message.id !== id));
+                setMessages(messages.filter(message => message.id !== id));
             }
         } catch (error) {
             console.error(error);
@@ -220,7 +127,7 @@ export const TelegramContext = ({ children }) => {
 
 
     const getMessages = () => {
-        fetch('http://127.0.0.1:3001/messeges')
+        fetch(`http://127.0.0.1:3001/message-user/${findContactForFilterMessages.id}/${choosenContact.id}`)
             .then(response => response.json())
             .then(messages => setMessages(messages))
     }
@@ -228,7 +135,6 @@ export const TelegramContext = ({ children }) => {
     const addNewMessage = (e) => {
         e.preventDefault();
         if (newMessage.text !== "") {
-            setMessages([...messages, newMessage]);
             fetch('http://127.0.0.1:3001/create-messages', {
                 method: 'POST',
                 headers: {
@@ -237,7 +143,7 @@ export const TelegramContext = ({ children }) => {
                 body: JSON.stringify(newMessage)
             })
                 .then(response => response.json())
-                .then(data => data)
+                .then(data => getMessages())
                 .catch(error => console.error(error))
             setNewMessege({
                 text: '',
@@ -245,7 +151,6 @@ export const TelegramContext = ({ children }) => {
             });
             setEmojiSelect(null);
         }
-        getMessages();
     }
 
     const handleChange = (e) => {
@@ -280,7 +185,6 @@ export const TelegramContext = ({ children }) => {
         // MessegeBox
         messages, setMessages,
         getContacts, setGetContacts,
-        filteredMessages, setFilteredMessages,
         showSearchMesseges, setShowSeachMessages,
         showAboutContact, setShowAboutContact,
         // MessageList 

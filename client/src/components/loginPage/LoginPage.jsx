@@ -3,7 +3,7 @@ import { Login } from './Login';
 import { Registration } from './Registration';
 
 export const LoginPage = () => {
-    const [registred, setRegistrad] = useState(true);
+    const [registred, setRegistrad] = useState(false);
 
 
     return (

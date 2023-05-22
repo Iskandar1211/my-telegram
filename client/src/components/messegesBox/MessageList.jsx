@@ -12,7 +12,7 @@ export const MessageList = () => {
     return (
         <div className={`${mListStyle}, messegeList pb-[100px]`} >
             <div >
-                {(choosenContact) && filteredMessages.map(message => (
+                {(choosenContact) && messages.map(message => (
                     <Message
                         key={message.id}
                         message={message}
